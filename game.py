@@ -10,27 +10,44 @@ def print_menu():
     print ("x. Exit")
 
 
+ACTION_VALID = 0
+ACTION_INVALID = 1
+ACTION_CONFLICT_BALL = 2
+
+
 def validate(action_string):
-    pass
-    if action_string == "y":
-        return False
+    if (action_string == 'x'):
+            return ACTION_VALID
+
+    if (re.match('[rw][1-7][rw][1-7]|[rw][f]', action_string)):
+        if (len(action_string) == 4):
+            if(action_string[:2] == action_string[2:]):
+                return ACTION_CONFLICT_BALL
+        return ACTION_VALID
     else:
-        return True
+        return ACTION_INVALID
 
 
 def process_game():
     sequence = 1
     while(True):
         action = input("[" + str(sequence) + "]: ")
-        if (validate(action)):
+        action = action.lower()
+        result = validate(action)
+        if (result == ACTION_VALID):
             if (action == "x"):
                 break
             sequence = sequence + 1
         else:
-            print ('"' + action + '" is invalid action input')
-            print ("Valid Format: bNbN or bf, b = r/g, N = 1 to 7")
-            print ("For foul, rf = red foul, wf = white foul")
-            print ("Example: r1g1, r1r2, r3w6, rf")
+            if (result == ACTION_INVALID):
+                print ('"' + action + '" is invalid action input')
+            else:
+                print ('"' + action + '" is has same striker and target')
+            print ("Usage: [STRIKER][TARGET]")
+            print ("  or:  [BALL][FOUL]")
+            print ("  [STRIKER][TARGET]     [rRwW][1-7][rRwW][1-7]")
+            print ("  [BALL][FOUL]          [rRwW][fF]")
+            print ("Example: r1w1, w1r2, r3r6, rf")
             print ("")
 
 
