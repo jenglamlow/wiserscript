@@ -32,10 +32,9 @@ def process_game():
     sequence = 1
     while(True):
         action = input("[" + str(sequence) + "]: ")
-        action = action.lower()
-        result = validate(action)
+        result = validate(action.lower())
         if (result == ACTION_VALID):
-            if (action == "x"):
+            if (action.lower() == "x"):
                 break
             sequence = sequence + 1
         else:
@@ -85,7 +84,7 @@ def main(argv):
     while (True):
         print_menu()
         selection = input("-->")
-        if selection != 'x':
+        if (selection.lower() != 'x'):
             action_map.get(selection, errHandler)()
         else:
             break
