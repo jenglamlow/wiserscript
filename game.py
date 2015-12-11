@@ -1,4 +1,5 @@
 import sys
+import re
 
 
 def print_menu():
@@ -9,8 +10,47 @@ def print_menu():
     print ("x. Exit")
 
 
+def validate(action_string):
+    pass
+    if action_string == "y":
+        return False
+    else:
+        return True
+
+
+def process_game():
+    sequence = 1
+    while(True):
+        action = input("[" + str(sequence) + "]: ")
+        if (validate(action)):
+            if (action == "x"):
+                break
+            sequence = sequence + 1
+        else:
+            print ('"' + action + '" is invalid action input')
+            print ("Valid Format: bNbN or bf, b = r/g, N = 1 to 7")
+            print ("For foul, rf = red foul, wf = white foul")
+            print ("Example: r1g1, r1r2, r3w6, rf")
+            print ("")
+
+
 def new_game():
+    print ("")
     print ("New Game")
+    print ("========")
+
+    while(True):
+        game_name = input("Enter Game Name --> ")
+        if (re.match('^[\w\-_]+$', game_name)):
+            break
+        else:
+            print ('"' + game_name + '" is invalid filename format')
+
+    print ("Game Name:", game_name)
+
+    process_game()
+
+    print ("Exit new game")
 
 
 def errHandler():
