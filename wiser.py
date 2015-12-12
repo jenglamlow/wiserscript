@@ -1,12 +1,11 @@
 import sys
 import re
+from game import Game
 
 
 ACTION_VALID = 0
 ACTION_INVALID = 1
 ACTION_CONFLICT_BALL = 2
-
-game_seqeunce = []
 
 
 def print_menu():
@@ -17,13 +16,13 @@ def print_menu():
     print ("x. Exit")
 
 
-def game_engine(action_string):
-    game_seqeunce.append(action_string)
+def game_engine(game, action_string):
+    game.add_action(action_string)
 
 
-def list_game_info():
+def list_game_info(game):
     seq = 1
-    for action in game_seqeunce:
+    for action in game.sequence:
         print ('[' + str(seq) + ']: ' + action)
         seq = seq + 1
 
@@ -41,7 +40,7 @@ def action_validate(action_string):
         return ACTION_INVALID
 
 
-def print_match_info():
+def print_match_help():
     print ("Usage: [STRIKER][TARGET]")
     print ("  or:  [BALL][FOUL]")
     print ("  or:  [OPTION]")
@@ -57,13 +56,13 @@ def print_match_info():
     print ("")
 
 
-def process_action_option(action_string):
+def process_action_option(game, action_string):
     if action_string == 'h':
-        print_match_info()
+        print_match_help()
     elif action_string == 'l':
         print ("=================")
         print ("List information")
-        list_game_info()
+        list_game_info(game)
         print ("=================")
     elif action_string == 'u':
         print ("Undo")
@@ -75,7 +74,7 @@ def process_action_option(action_string):
     return True
 
 
-def process_game():
+def process_game(game):
     sequence = 1
     while(True):
         action = input("[" + str(sequence) + "]: ")
@@ -84,9 +83,9 @@ def process_game():
         if result == ACTION_VALID:
             if action == 'x':
                 break
-            if process_action_option(action):
+            if process_action_option(game, action):
                 continue
-            game_engine(action)
+            game_engine(game, action)
             sequence = sequence + 1
         else:
             if result == ACTION_INVALID:
@@ -109,9 +108,9 @@ def new_game():
         else:
             print ('"' + game_name + '" is invalid filename format')
 
-    print ("Game Name:", game_name)
-
-    process_game()
+    game = Game(game_name)
+    process_game(game)
+    del game
 
     print ("Exit new game")
 
