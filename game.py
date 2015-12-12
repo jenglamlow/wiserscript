@@ -6,6 +6,8 @@ ACTION_VALID = 0
 ACTION_INVALID = 1
 ACTION_CONFLICT_BALL = 2
 
+game_seqeunce = []
+
 
 def print_menu():
     print ("")
@@ -16,7 +18,14 @@ def print_menu():
 
 
 def game_engine(action_string):
-    pass
+    game_seqeunce.append(action_string)
+
+
+def list_game_info():
+    seq = 1
+    for action in game_seqeunce:
+        print ('[' + str(seq) + ']: ' + action)
+        seq = seq + 1
 
 
 def action_validate(action_string):
@@ -52,7 +61,10 @@ def process_action_option(action_string):
     if action_string == 'h':
         print_match_info()
     elif action_string == 'l':
+        print ("=================")
         print ("List information")
+        list_game_info()
+        print ("=================")
     elif action_string == 'u':
         print ("Undo")
     elif action_string[0] == 's':
