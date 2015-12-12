@@ -17,7 +17,7 @@ def print_menu():
 
 
 def game_engine(game, action_string):
-    game.add_action(action_string)
+    return game.add_action(action_string)
 
 
 def list_game_info(game):
@@ -75,9 +75,8 @@ def process_action_option(game, action_string):
 
 
 def process_game(game):
-    sequence = 1
     while(True):
-        action = input("[" + str(sequence) + "]: ")
+        action = input("[" + str(game.seq_num) + "]: ")
         action = action.lower()
         result = action_validate(action)
         if result == ACTION_VALID:
@@ -85,8 +84,11 @@ def process_game(game):
                 break
             if process_action_option(game, action):
                 continue
-            game_engine(game, action)
-            sequence = sequence + 1
+            if game_engine(game, action):
+                game.seq_num = game.seq_num + 1
+            else:
+                print ("Please enter a valid input")
+                continue
         else:
             if result == ACTION_INVALID:
                 print ('"' + action + '" is invalid action input')
@@ -110,7 +112,6 @@ def new_game():
 
     game = Game(game_name)
     process_game(game)
-    del game
 
     print ("Exit new game")
 
