@@ -27,23 +27,35 @@ class Game:
         ball_team = ball[0]
         ball_num = int(ball[1])
 
-        return self._team[ball_team].ball[ball_num - 1].status
+        return self._team[ball_team].get_status(ball_num)
 
-
-    def add_action(self, action):
+    def process(self, action):
         # Check whether is foul or attack
         if len(action) == 4:
             # Attack
-            # striker_team = action[0]
-            # striker_num = int(action[1])
-            # target_team = action[2]
-            # target_num = int(action[3])
             striker = action[:2]
+            target = action[2:]
+            striker_team = striker[0]
+            target_team = target[0]
 
-            # Check whether the ball is contesting ball
+            # Check whether the striker is contesting ball
             if (Game.get_ball_status(self, striker) != 0):
                 print ('"' + striker + '" is not contesting ball')
                 return False
+
+            # Check whether the target is eliminated
+            if (Game.get_ball_status(self, target) == 3):
+                print ('"' + target + '" is already eliminated')
+                return False
+
+            # Miss Hit?
+            if striker_team != target_team:
+                self._team[striker_team].update_status(action)
+                self._team[target_team].update_status(action)
+            else:
+                print (striker + " Miss Hit " + target)
+                self._team[striker_team].update_status(action)
+
             self._sequence.append(action)
 
         return True

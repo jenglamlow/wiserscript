@@ -13,3 +13,9 @@ class Team:
 
         for i in range(1, 8):
             self._ball.append(Ball(i))
+
+    def get_status(self, num):
+        return self._ball[num - 1].status
+
+    def update_status(self, action):
+        pass

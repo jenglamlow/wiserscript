@@ -16,10 +16,6 @@ def print_menu():
     print ("x. Exit")
 
 
-def game_engine(game, action_string):
-    return game.add_action(action_string)
-
-
 def list_game_info(game):
     seq = 1
     for action in game.sequence:
@@ -51,7 +47,7 @@ def print_match_help():
     print ("    h                     Help information")
     print ("    l                     List all match sequence and info")
     print ("    u                     Undo previous sequence")
-    print ("    s[Number]             Start edit from sequence Number, remove all the action after the sequence number")
+    print ("    s[Number]             Start edit from sequence number")
     print ("    x                     Exit")
     print ("")
 
@@ -84,7 +80,7 @@ def process_game(game):
                 break
             if process_action_option(game, action):
                 continue
-            if game_engine(game, action):
+            if game.process(action):
                 game.seq_num = game.seq_num + 1
             else:
                 print ("Please enter a valid input")
