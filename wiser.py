@@ -13,7 +13,7 @@ def print_menu():
     print ("WISER GAME RECORDER")
     print ("===================")
     print ("1. New Game")
-    print ("x. Exit")
+    print ("q. Exit")
 
 
 def list_game_info(game):
@@ -24,7 +24,7 @@ def list_game_info(game):
 
 
 def action_validate(action_string):
-    if re.match('[hlux]|[s][\d]+', action_string):
+    if re.match('[hluq]|[s][\d]+', action_string):
             return ACTION_VALID
 
     if re.match('[rw][1-7][rw][1-7]|[rw][1-7][f]', action_string):
@@ -48,7 +48,7 @@ def print_match_help():
     print ("    l                     List all match sequence and info")
     print ("    u                     Undo previous sequence")
     print ("    s[Number]             Start edit from sequence number")
-    print ("    x                     Exit")
+    print ("    q                     Exit")
     print ("")
 
 
@@ -76,7 +76,7 @@ def process_game(game):
         action = action.lower()
         result = action_validate(action)
         if result == ACTION_VALID:
-            if action == 'x':
+            if action == 'q':
                 break
             if process_action_option(game, action):
                 continue
@@ -127,7 +127,7 @@ def main(argv):
     while (True):
         print_menu()
         selection = input("-->")
-        if selection.lower() != 'x':
+        if selection.lower() != 'q':
             menu_map.get(selection, errHandler)()
         else:
             break
