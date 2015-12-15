@@ -25,7 +25,12 @@ class Game:
 
     def print_info(self):
         for i in range(0, 7):
-            print ("Ball[%d]:" % (i + 1))
+            print ("Ball[%d]:" % (i + 1), self._team['r'].ball[i].status,
+                   self._team['r'].ball[i].active_hit_list)
+
+        for i in range(0, 7):
+            print ("Ball[%d]:" % (i + 1), self._team['w'].ball[i].status,
+                   self._team['w'].ball[i].active_hit_list)
 
     def get_ball_status(self, ball):
         ball_team = ball[0]
@@ -61,7 +66,6 @@ class Game:
                     .get_hit_by(striker)
             else:
                 print (striker + " Miss Hit " + target)
-                self._team[striker_team].update_status(action)
 
             self._sequence.append(action)
 

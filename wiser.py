@@ -21,7 +21,7 @@ def list_game_info(game):
     for action in game.sequence:
         print ('[' + str(seq) + ']: ' + action)
         seq = seq + 1
-
+    print ("-----------------")
     game.print_info()
 
 
