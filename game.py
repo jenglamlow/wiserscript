@@ -23,6 +23,10 @@ class Game:
 
         print ("Game Name:", name)
 
+    def print_info(self):
+        for i in range(0, 7):
+            print ("Ball[%d]:" % (i + 1))
+
     def get_ball_status(self, ball):
         ball_team = ball[0]
         ball_num = int(ball[1])
@@ -37,21 +41,24 @@ class Game:
             target = action[2:]
             striker_team = striker[0]
             target_team = target[0]
+            striker_num = int(striker[1])
+            target_num = int(target[1])
 
             # Check whether the striker is contesting ball
             if (Game.get_ball_status(self, striker) != 0):
-                print ('"' + striker + '" is not contesting ball')
+                print ("\"%s\" is not contesting ball" % (striker))
                 return False
 
             # Check whether the target is eliminated
             if (Game.get_ball_status(self, target) == 3):
-                print ('"' + target + '" is already eliminated')
+                print ("\"%s\" is already eliminated" % (target))
                 return False
 
             # Miss Hit?
             if striker_team != target_team:
-                self._team[striker_team].update_status(action)
-                self._team[target_team].update_status(action)
+                self._team[striker_team].ball[striker_num - 1].hit(target)
+                rescue = self._team[target_team].ball[target_num - 1] \
+                    .get_hit_by(striker)
             else:
                 print (striker + " Miss Hit " + target)
                 self._team[striker_team].update_status(action)

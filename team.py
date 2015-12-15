@@ -16,6 +16,3 @@ class Team:
 
     def get_status(self, num):
         return self._ball[num - 1].status
-
-    def update_status(self, action):
-        pass

@@ -22,6 +22,8 @@ def list_game_info(game):
         print ('[' + str(seq) + ']: ' + action)
         seq = seq + 1
 
+    game.print_info()
+
 
 def action_validate(action_string):
     if re.match('[hluq]|[s][\d]+', action_string):
@@ -83,13 +85,13 @@ def process_game(game):
             if game.process(action):
                 game.seq_num = game.seq_num + 1
             else:
-                print ("Please enter a valid input")
+                # print ("Please enter a valid input")
                 continue
         else:
             if result == ACTION_INVALID:
-                print ('"' + action + '" is invalid action input')
+                print ("\"%s\" is invalid action input" % (action))
             else:
-                print ('"' + action + '" is has same striker and target')
+                print ("\"%s\" has same striker and target" % (action))
             print ('Try "h" to for more infomation.')
             print ("")
 
@@ -104,7 +106,7 @@ def new_game():
         if re.match('^[\w\-_]+$', game_name):
             break
         else:
-            print ('"' + game_name + '" is invalid filename format')
+            print ("\"%s\" is invalid filename format" % (game_name))
 
     game = Game(game_name)
     process_game(game)
