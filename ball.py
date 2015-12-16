@@ -29,6 +29,14 @@ class Ball:
         self._get_hit_list = []
         self._active_hit_list = []
 
+    def reset(self):
+        self._status = 0
+        self._foul = 0
+        self._misshit = False
+        self._hit_list = []
+        self._get_hit_list = []
+        self._active_hit_list = []
+
     def __increase_status(self):
         assert self._status < 3
         assert self._status >= 0

@@ -16,3 +16,7 @@ class Team:
 
     def get_status(self, num):
         return self._ball[num - 1].status
+
+    def reset(self):
+        for i in range(0, 7):
+            self._ball[i].reset()
