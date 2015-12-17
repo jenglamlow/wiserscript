@@ -10,13 +10,23 @@ class Team:
     def __init__(self, color):
         self._color = color
         self._ball = []
+        self._pending_hit = []
+        self._pending_miss_hit = []
 
         for i in range(1, 8):
             self._ball.append(Ball(i))
 
+    def reset(self):
+        self._pending_hit = []
+        self._pending_miss_hit = []
+        for i in range(0, 7):
+            self._ball[i].reset()
+
     def get_status(self, num):
         return self._ball[num - 1].status
 
-    def reset(self):
-        for i in range(0, 7):
-            self._ball[i].reset()
+    def update_pending_hit(self, num):
+        self._pending_hit.extend(self._ball[num-1].active_hit_list)
+
+    def update_pending_miss_hit(self, num):
+        self._pending_miss_hit.extend(self._ball[num-1].active_hit_list)

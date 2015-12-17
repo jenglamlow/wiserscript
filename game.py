@@ -84,9 +84,9 @@ class Game:
                     .get_hit_by(striker)
 
                 # Check any pending hit list for eliminated ball
-                #if (self.is_eliminated(target)):
-
-
+                if (self.is_eliminated(target)):
+                    # Keep track pending hit list
+                    
 
             # Miss Hit
             else:
