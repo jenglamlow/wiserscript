@@ -3,11 +3,6 @@ import re
 from game import Game
 
 
-ACTION_VALID = 0
-ACTION_INVALID = 1
-ACTION_CONFLICT_BALL = 2
-
-
 def print_menu():
     print ("")
     print ("WISER GAME RECORDER")
@@ -25,19 +20,19 @@ def list_game_info(game):
     game.print_info()
 
 
-def action_validate(action_string):
+def action_validate(action):
     mode_regex = r"\b[hluq]{1}\b|\b[s][1-9][0-9]{0,2}\b"
-    if re.match(mode_regex, action_string):
-            return ACTION_VALID
-
     action_regex = r"\b[rw][1-7][rw][1-7]\b|\b[rw][1-7][f][o]{0,1}\b"
-    if re.match(action_regex, action_string):
-        if len(action_string) == 4:
-            if action_string[:2] == action_string[2:]:
-                return ACTION_CONFLICT_BALL
-        return ACTION_VALID
+
+    if re.match(mode_regex, action):
+        pass
+    elif re.match(action_regex, action):
+        if len(action) == 4:
+            if action[:2] == action[2:]:
+                raise ValueError("\"%s\" has same striker and target" % (action))
     else:
-        return ACTION_INVALID
+        raise ValueError("\"%s\" is invalid action input" % (action))
+
 
 
 def print_match_help():
@@ -79,8 +74,9 @@ def process_game(game):
     while(True):
         action = input("[" + str(game.seq_num) + "]: ")
         action = action.lower()
-        result = action_validate(action)
-        if result == ACTION_VALID:
+        try:
+            result = action_validate(action)
+
             if action == 'q':
                 break
             if process_action_option(game, action):
@@ -90,11 +86,8 @@ def process_game(game):
             else:
                 # print ("Please enter a valid input")
                 continue
-        else:
-            if result == ACTION_INVALID:
-                print ("\"%s\" is invalid action input" % (action))
-            else:
-                print ("\"%s\" has same striker and target" % (action))
+        except ValueError as err:
+            print (err)
             print ('Try "h" to for more infomation.')
             print ("")
 
