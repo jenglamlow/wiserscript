@@ -40,8 +40,8 @@ def print_match_help():
     print ("  or:  [BALL][FOUL]")
     print ("  or:  [OPTION]")
     print ("    [STRIKER][TARGET]     [rw][1-7][rw][1-7]")
-    print ("    [BALL][FOUL]          [rw][1-7][f]")
-    print ("Example: r1w1, w1r2, r3r6, r2f")
+    print ("    [BALL][FOUL][OUT]     [rw][1-7][f][o]")
+    print ("Example: r1w1, w1r2, r3r6, r2f, r3fo")
     print ("[OPTION]:")
     print ("    h                     Help information")
     print ("    l                     List all match sequence and info")
@@ -81,11 +81,13 @@ def process_game(game):
                 break
             if process_action_option(game, action):
                 continue
-            if game.process(action):
+
+            try:
+                game.process(action)
                 game.seq_num = game.seq_num + 1
-            else:
-                # print ("Please enter a valid input")
-                continue
+            except ValueError as err:
+                print (err)
+
         except ValueError as err:
             print (err)
             print ('Try "h" to for more infomation.')

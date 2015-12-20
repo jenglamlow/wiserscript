@@ -73,15 +73,17 @@ class Game:
             striker_num = int(striker[1])
             target_num = int(target[1])
 
-            # Check whether the striker is contesting ball
-            if (not self.is_contesting(striker)):
-                print ("\"%s\" is not contesting ball" % (striker))
-                return False
-
             # Check whether the target is eliminated
-            if (self.is_eliminated(target)):
-                print ("\"%s\" is already eliminated" % (target))
-                return False
+            if self.is_eliminated(target):
+                raise ValueError("\"%s\" is already eliminated" % (target))
+
+            # Check whether the striker is contesting ball
+            if not self.is_contesting(striker):
+                if self.is_eliminated(striker):
+                    raise ValueError("\"%s\" is already eliminated" % (striker))
+                else:
+                    raise ValueError("\"%s\" is not contesting ball" % (striker))
+
 
             # Proper Hit
             if striker_team != target_team:
@@ -111,5 +113,3 @@ class Game:
                 print (striker + " Miss Hit " + target)
 
             self._sequence.append(action)
-
-        return True
