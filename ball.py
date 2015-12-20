@@ -13,6 +13,11 @@ class Ball:
         return self._active_hit_list
 
     @property
+    def get_hit_list(self):
+        return self._get_hit_list
+    
+
+    @property
     def hit_list(self):
         return self._hit_list
 
@@ -24,7 +29,7 @@ class Ball:
         self._number = number
         self._status = 0
         self._foul = 0
-        self._misshit = False
+        self._miss_hit = False
         self._hit_list = []
         self._get_hit_list = []
         self._active_hit_list = []
@@ -32,7 +37,7 @@ class Ball:
     def reset(self):
         self._status = 0
         self._foul = 0
-        self._misshit = False
+        self._miss_hit = False
         self._hit_list = []
         self._get_hit_list = []
         self._active_hit_list = []
@@ -64,23 +69,27 @@ class Ball:
             self._active_hit_list.remove(ball)
 
     def remove_active_hit(self, ball):
-        if len(self._active_hit_list) > 0:
+        if self._active_hit_list.count(ball) > 0:
             self._active_hit_list.remove(ball)
-
 
     def hit(self, ball):
         self._hit_list.append(ball)
         self._active_hit_list.append(ball)
 
-    def misshit(self, ball):
-        self._misshit = True
+    def miss_hit(self, ball):
+        self.miss_hit = True
         self._status = 3
 
         # To be confirm
-        Ball.hit(ball)
+        self.hit(ball)
 
     def rescue(self):
         self.__decrease_status()
+        return self._get_hit_list.pop(0)
 
     def commit_foul(self):
         self._foul = self._foul + 1
+
+    def eliminated(self):
+        assert self._status < 3
+        self._status = 3

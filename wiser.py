@@ -29,10 +29,10 @@ def action_validate(action):
     elif re.match(action_regex, action):
         if len(action) == 4:
             if action[:2] == action[2:]:
-                raise ValueError("\"%s\" has same striker and target" % (action))
+                raise ValueError("\"%s\" has same striker and target" %
+                                 (action))
     else:
         raise ValueError("\"%s\" is invalid action input" % (action))
-
 
 
 def print_match_help():
@@ -75,7 +75,7 @@ def process_game(game):
         action = input("[" + str(game.seq_num) + "]: ")
         action = action.lower()
         try:
-            result = action_validate(action)
+            action_validate(action)
 
             if action == 'q':
                 break

@@ -47,10 +47,4 @@ class Team:
                 break
             break
 
-        # remove any active list from ball
-        if pending_rescue != '0':
-            for i in range(0, 7):
-                if self._ball[i].status == 3:
-                    self._ball[i].remove_active_hit(pending_rescue)
-
         return pending_rescue

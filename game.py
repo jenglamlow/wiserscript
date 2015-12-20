@@ -26,11 +26,20 @@ class Game:
     def print_info(self):
         for i in range(0, 7):
             print ("r%d:" % (i + 1), self._team['r'].ball[i].status,
+                   self._team['r'].ball[i].get_hit_list,
                    self._team['r'].ball[i].active_hit_list)
+
+        print ("Red team pending hit",  self._team['r']._pending_hit)
+        print ("Red team pending miss hit",  self._team['r']._pending_miss_hit)
 
         for i in range(0, 7):
             print ("w%d:" % (i + 1), self._team['w'].ball[i].status,
+                   self._team['w'].ball[i].get_hit_list,
                    self._team['w'].ball[i].active_hit_list)
+
+        print ("White team pending hit",  self._team['w']._pending_hit)
+        print ("White team pending miss hit",
+               self._team['w']._pending_miss_hit)
 
     def get_ball_status(self, ball):
         ball_team = ball[0]
@@ -54,7 +63,7 @@ class Game:
         rescue_team = ball[0]
         rescue_ball = int(ball[1])
 
-        self._team[rescue_team].ball[rescue_ball-1].rescue()
+        return self._team[rescue_team].ball[rescue_ball-1].rescue()
 
     def reset(self):
         self._seq_num = 1
@@ -80,10 +89,11 @@ class Game:
             # Check whether the striker is contesting ball
             if not self.is_contesting(striker):
                 if self.is_eliminated(striker):
-                    raise ValueError("\"%s\" is already eliminated" % (striker))
+                    raise ValueError("\"%s\" is already eliminated" %
+                                     (striker))
                 else:
-                    raise ValueError("\"%s\" is not contesting ball" % (striker))
-
+                    raise ValueError("\"%s\" is not contesting ball" %
+                                     (striker))
 
             # Proper Hit
             if striker_team != target_team:
@@ -91,11 +101,13 @@ class Game:
                 rescue_ball = self._team[target_team].ball[target_num - 1] \
                     .get_hit_by(striker)
 
+                # if there is a rescue ball
                 if rescue_ball != '0':
                     self.rescue(rescue_ball)
                 else:
                     # Check any pending rescue list
                     rescue_ball = self._team[target_team].get_pending_rescue()
+                    print ("RES", rescue_ball)
 
                     if rescue_ball != '0':
                         self.rescue(rescue_ball)
@@ -103,7 +115,8 @@ class Game:
                 # Check any pending hit list for eliminated ball
                 if (self.is_eliminated(target)):
                     # Remove Active Hit List from Striker
-                    self._team[striker_team].ball[striker_num - 1].remove_all_active_hit(target)
+                    self._team[striker_team].ball[striker_num - 1] \
+                        .remove_all_active_hit(target)
 
                     # Keep track pending hit list
                     self._team[target_team].update_pending_hit(target_num)
@@ -111,5 +124,12 @@ class Game:
             # Miss Hit
             else:
                 print (striker + " Miss Hit " + target)
+                self._team[striker_team].ball[striker_num - 1].miss_hit(target)
+                self._team[target_team].ball[target_num - 1] \
+                    .get_hit_by(striker)
+
+                self._team[striker_team].update_pending_miss_hit(striker_num)
 
             self._sequence.append(action)
+            self.print_info()
+            print("")

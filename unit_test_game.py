@@ -38,7 +38,7 @@ class TestGame(unittest.TestCase):
         self.assertFalse(self._game.is_second_lock('w2'))
         self.assertFalse(self._game.is_eliminated('w2'))
 
-    def test_scenario_striker_eliminated_pending_rescue(self):
+    def test_scenario_pending_rescue(self):
         self._game.process('r1w3')
         self._game.process('r1w3')
         self._game.process('r1w2')
@@ -46,9 +46,27 @@ class TestGame(unittest.TestCase):
         self._game.process('w4r1')
         self._game.process('w4r1')
         self._game.process('w4r1')
+        self._game.process('r6r7')
         self._game.process('w4r2')
 
         self.assertTrue(self._game.is_contesting('w2'))
+
+    def test_scenario_pending_rescue_2(self):
+        self._game.process('r2w3')
+        self._game.process('r2w3')
+        self._game.process('r2w2')
+        self._game.process('r2w1')
+        self._game.process('r1w4')
+        self._game.process('r1w4')
+        self._game.process('r1w2')
+        self._game.process('r1w1')
+        self._game.process('w6r1')
+        self._game.process('w6r1')
+        self._game.process('w6r1')
+        self._game.process('w6r2')
+        self._game.process('w6r2')
+        self._game.process('w6r2')
+        self._game.process('w6r3')
 
 
 if __name__ == '__main__':
