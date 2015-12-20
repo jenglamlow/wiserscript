@@ -58,10 +58,15 @@ class Ball:
 
         return rescue
 
-    def remove_active_hit(self, ball):
+    def remove_all_active_hit(self, ball):
         count = self._active_hit_list.count(ball)
         for i in range(0, count):
             self._active_hit_list.remove(ball)
+
+    def remove_active_hit(self, ball):
+        if len(self._active_hit_list) > 0:
+            self._active_hit_list.remove(ball)
+
 
     def hit(self, ball):
         self._hit_list.append(ball)

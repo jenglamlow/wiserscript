@@ -38,6 +38,18 @@ class TestGame(unittest.TestCase):
         self.assertFalse(self._game.is_second_lock('w2'))
         self.assertFalse(self._game.is_eliminated('w2'))
 
+    def test_scenario_striker_eliminated_pending_rescue(self):
+        self._game.process('r1w3')
+        self._game.process('r1w3')
+        self._game.process('r1w2')
+        self._game.process('r1w2')
+        self._game.process('w4r1')
+        self._game.process('w4r1')
+        self._game.process('w4r1')
+        self._game.process('w4r2')
+
+        self.assertTrue(self._game.is_contesting('w2'))
+
 
 if __name__ == '__main__':
     unittest.main()

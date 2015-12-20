@@ -26,7 +26,31 @@ class Team:
         return self._ball[num - 1].status
 
     def update_pending_hit(self, num):
-        self._pending_hit.extend(self._ball[num-1].active_hit_list)
+        if len(self._ball[num-1].active_hit_list) > 0:
+            self._pending_hit.extend(self._ball[num-1].active_hit_list)
 
     def update_pending_miss_hit(self, num):
-        self._pending_miss_hit.extend(self._ball[num-1].active_hit_list)
+        if len(self._ball[num-1].active_hit_list) > 0:
+            self._pending_miss_hit.extend(self._ball[num-1].active_hit_list)
+
+    def get_pending_rescue(self):
+        pending_rescue = '0'
+
+        # Save hit list first
+        while True:
+            if len(self._pending_hit) > 0:
+                pending_rescue = self._pending_hit.pop(0)
+                break
+
+            if len(self._pending_miss_hit) > 0:
+                pending_rescue = self._pending_miss_hit.pop(0)
+                break
+            break
+
+        # remove any active list from ball
+        if pending_rescue != '0':
+            for i in range(0, 7):
+                if self._ball[i].status == 3:
+                    self._ball[i].remove_active_hit(pending_rescue)
+
+        return pending_rescue

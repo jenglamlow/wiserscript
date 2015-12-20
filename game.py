@@ -50,6 +50,12 @@ class Game:
     def is_eliminated(self, ball):
         return self.get_ball_status(ball) == 3
 
+    def rescue(self, ball):
+        rescue_team = ball[0]
+        rescue_ball = int(ball[1])
+
+        self._team[rescue_team].ball[rescue_ball-1].rescue()
+
     def reset(self):
         self._seq_num = 1
         self._sequence = []
@@ -80,13 +86,25 @@ class Game:
             # Proper Hit
             if striker_team != target_team:
                 self._team[striker_team].ball[striker_num - 1].hit(target)
-                rescue = self._team[target_team].ball[target_num - 1] \
+                rescue_ball = self._team[target_team].ball[target_num - 1] \
                     .get_hit_by(striker)
+
+                if rescue_ball != '0':
+                    self.rescue(rescue_ball)
+                else:
+                    # Check any pending rescue list
+                    rescue_ball = self._team[target_team].get_pending_rescue()
+
+                    if rescue_ball != '0':
+                        self.rescue(rescue_ball)
 
                 # Check any pending hit list for eliminated ball
                 if (self.is_eliminated(target)):
+                    # Remove Active Hit List from Striker
+                    self._team[striker_team].ball[striker_num - 1].remove_all_active_hit(target)
+
                     # Keep track pending hit list
-                    
+                    self._team[target_team].update_pending_hit(target_num)
 
             # Miss Hit
             else:

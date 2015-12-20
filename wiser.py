@@ -60,6 +60,7 @@ def process_action_option(game, action_string):
     if action_string == 'h':
         print_match_help()
     elif action_string == 'l':
+        print ("")
         print ("=================")
         print ("List information")
         list_game_info(game)
