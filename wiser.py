@@ -26,10 +26,12 @@ def list_game_info(game):
 
 
 def action_validate(action_string):
-    if re.match('[hluq]|[s][\d]+', action_string):
+    mode_regex = r"\b[hluq]{1}\b|\b[s][1-9][0-9]{0,2}\b"
+    if re.match(mode_regex, action_string):
             return ACTION_VALID
 
-    if re.match('[rw][1-7][rw][1-7]|[rw][1-7][f]', action_string):
+    action_regex = r"\b[rw][1-7][rw][1-7]\b|\b[rw][1-7][f][o]{0,1}\b"
+    if re.match(action_regex, action_string):
         if len(action_string) == 4:
             if action_string[:2] == action_string[2:]:
                 return ACTION_CONFLICT_BALL
