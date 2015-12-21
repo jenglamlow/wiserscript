@@ -26,8 +26,9 @@ class Team:
         return self._ball[num - 1].status
 
     def update_pending_hit(self, num):
-        if len(self._ball[num-1].active_hit_list) > 0:
-            self._pending_hit.extend(self._ball[num-1].active_hit_list)
+        for ball in self._ball[num-1].active_hit_list:
+            if ball[0] != self._color:
+                self._pending_hit.append(ball)
 
     def update_pending_miss_hit(self, ball):
         self._pending_miss_hit.append(ball)
