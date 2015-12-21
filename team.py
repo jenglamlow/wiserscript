@@ -29,9 +29,8 @@ class Team:
         if len(self._ball[num-1].active_hit_list) > 0:
             self._pending_hit.extend(self._ball[num-1].active_hit_list)
 
-    def update_pending_miss_hit(self, num):
-        if len(self._ball[num-1].active_hit_list) > 0:
-            self._pending_miss_hit.extend(self._ball[num-1].active_hit_list)
+    def update_pending_miss_hit(self, ball):
+        self._pending_miss_hit.append(ball)
 
     def get_pending_rescue(self):
         pending_rescue = '0'

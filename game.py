@@ -11,6 +11,10 @@ class Game:
     def seq_num(self):
         return self._seq_num
 
+    @property
+    def team(self):
+        return self._team
+
     @seq_num.setter
     def seq_num(self, value):
         self._seq_num = value
@@ -107,10 +111,14 @@ class Game:
                 else:
                     # Check any pending rescue list
                     rescue_ball = self._team[target_team].get_pending_rescue()
-                    print ("RES", rescue_ball)
+                    print ("RES", target_team, rescue_ball)
 
                     if rescue_ball != '0':
-                        self.rescue(rescue_ball)
+                        get_hit = self.rescue(rescue_ball)
+                        get_hit_team = get_hit[0]
+                        get_hit_num = int(get_hit[1])
+                        self._team[get_hit_team].ball[get_hit_num-1] \
+                            .remove_active_hit(rescue_ball)
 
                 # Check any pending hit list for eliminated ball
                 if (self.is_eliminated(target)):
@@ -128,7 +136,14 @@ class Game:
                 self._team[target_team].ball[target_num - 1] \
                     .get_hit_by(striker)
 
-                self._team[striker_team].update_pending_miss_hit(striker_num)
+                self._team[target_team].update_pending_hit(striker_num)
+
+                if target_team == 'w':
+                    opponent = 'r'
+                else:
+                    opponent = 'w'
+
+                self._team[opponent].update_pending_miss_hit(target)
 
             self._sequence.append(action)
             self.print_info()

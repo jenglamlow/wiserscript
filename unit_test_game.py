@@ -68,6 +68,17 @@ class TestGame(unittest.TestCase):
         self._game.process('w6r2')
         self._game.process('w6r3')
 
+        self.assertTrue(self._game.is_first_lock('w1'))
+
+        self._game.process('w6r3')
+
+        self.assertTrue(self._game.is_contesting('w1'))
+
+    def test_scenario_miss_hit_rescue(self):
+        self._game.process('r2w1')
+        self._game.process('r2r3')
+        self._game.process('w7r6')
+        self._game.process('r4w3')
 
 if __name__ == '__main__':
     unittest.main()

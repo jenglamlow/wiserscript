@@ -15,7 +15,6 @@ class Ball:
     @property
     def get_hit_list(self):
         return self._get_hit_list
-    
 
     @property
     def hit_list(self):
@@ -89,7 +88,3 @@ class Ball:
 
     def commit_foul(self):
         self._foul = self._foul + 1
-
-    def eliminated(self):
-        assert self._status < 3
-        self._status = 3
