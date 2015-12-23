@@ -35,16 +35,25 @@ class Game:
     def print_info(self):
         # Constuct Table
         table = []
+        team_list = ['r', 'w']
 
-        for team in self._team:
+        for team in team_list:
             for i in range(0, 7):
                 row = []
                 row.append("%s%d" % (team, (i + 1)))
                 row.append(self._team[team].ball[i].status)
-                row.append(", ".join(self._team[team].ball[i].get_hit_list))
-                row.append(", ".join(self._team[team].ball[i].active_hit_list))
-                row.append(", ".join(self._team[team]._pending_hit))
-                row.append(", ".join(self._team[team]._pending_miss_hit))
+                if self._team[team].ball[i].status != 3:
+                    row.append(", ".join(self._team[team].ball[i].
+                               get_hit_list))
+                    row.append(", ".join(self._team[team].ball[i].
+                               active_hit_list))
+                    row.append(", ".join(self._team[team]._pending_hit))
+                    row.append(", ".join(self._team[team]._pending_miss_hit))
+                else:
+                    row.append("-----")
+                    row.append("-----")
+                    row.append("-----")
+                    row.append("-----")
                 table.append(row)
 
         print (tabulate(table,
