@@ -12,6 +12,7 @@ class TestGame(unittest.TestCase):
         white_list = ['w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7']
         cls._rw_combo = list(map(''.join, itertools.chain(itertools.product(
             red_list, white_list), itertools.product(white_list, red_list))))
+        cls._game.activate_debug()
 
     def setUp(self):
         self._game.reset()

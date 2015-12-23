@@ -1,4 +1,5 @@
 from team import Team
+from tabulate import tabulate
 
 
 class Game:
@@ -24,26 +25,32 @@ class Game:
         self._seq_num = 1
         self._sequence = []
         self._team = {'r': Team('r'), 'w': Team('w')}
+        self._debug_mode = False
 
         print ("Game Name:", name)
 
+    def activate_debug(self):
+        self._debug_mode = True
+
     def print_info(self):
-        for i in range(0, 7):
-            print ("r%d:" % (i + 1), self._team['r'].ball[i].status,
-                   self._team['r'].ball[i].get_hit_list,
-                   self._team['r'].ball[i].active_hit_list)
+        # Constuct Table
+        table = []
 
-        print ("Red team pending hit",  self._team['r']._pending_hit)
-        print ("Red team pending miss hit",  self._team['r']._pending_miss_hit)
+        for team in self._team:
+            for i in range(0, 7):
+                row = []
+                row.append("%s%d" % (team, (i + 1)))
+                row.append(self._team[team].ball[i].status)
+                row.append(", ".join(self._team[team].ball[i].get_hit_list))
+                row.append(", ".join(self._team[team].ball[i].active_hit_list))
+                row.append(", ".join(self._team[team]._pending_hit))
+                row.append(", ".join(self._team[team]._pending_miss_hit))
+                table.append(row)
 
-        for i in range(0, 7):
-            print ("w%d:" % (i + 1), self._team['w'].ball[i].status,
-                   self._team['w'].ball[i].get_hit_list,
-                   self._team['w'].ball[i].active_hit_list)
-
-        print ("White team pending hit",  self._team['w']._pending_hit)
-        print ("White team pending miss hit",
-               self._team['w']._pending_miss_hit)
+        print (tabulate(table,
+               headers=["Ball", "Stat", "Get Hit", "Hit",
+                        "Pending", "Miss Hit"],
+               tablefmt="psql", numalign="center", stralign="center"))
 
     def get_ball_status(self, ball):
         ball_team = ball[0]
@@ -111,7 +118,6 @@ class Game:
                 else:
                     # Check any pending rescue list
                     rescue_ball = self._team[target_team].get_pending_rescue()
-                    print ("RES", target_team, rescue_ball)
 
                     if rescue_ball != '0':
                         get_hit = self.rescue(rescue_ball)
@@ -146,5 +152,6 @@ class Game:
                 self._team[opponent].update_pending_miss_hit(target)
 
             self._sequence.append(action)
-            self.print_info()
-            print("")
+            if self._debug_mode:
+                self.print_info()
+                print("")
