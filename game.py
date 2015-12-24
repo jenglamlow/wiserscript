@@ -42,18 +42,14 @@ class Game:
                 row = []
                 row.append("%s%d" % (team, (i + 1)))
                 row.append(self._team[team].ball[i].status)
-                if self._team[team].ball[i].status != 3:
-                    row.append(", ".join(self._team[team].ball[i].
-                               get_hit_list))
-                    row.append(", ".join(self._team[team].ball[i].
-                               active_hit_list))
-                    row.append(", ".join(self._team[team]._pending_hit))
-                    row.append(", ".join(self._team[team]._pending_miss_hit))
-                else:
-                    row.append("-----")
-                    row.append("-----")
-                    row.append("-----")
-                    row.append("-----")
+
+                row.append(", ".join(self._team[team].ball[i].
+                           get_hit_list))
+                row.append(", ".join(self._team[team].ball[i].
+                           active_hit_list))
+                row.append(", ".join(self._team[team]._pending_hit))
+                row.append(", ".join(self._team[team]._pending_miss_hit))
+
                 table.append(row)
 
         print (tabulate(table,
@@ -117,36 +113,41 @@ class Game:
 
             # Proper Hit
             if striker_team != target_team:
+                print (striker + " Hit " + target)
                 self._team[striker_team].ball[striker_num - 1].hit(target)
                 rescue_ball = self._team[target_team].ball[target_num - 1] \
                     .get_hit_by(striker)
 
-                # if there is a rescue ball
-                if rescue_ball != '0':
-                    self.rescue(rescue_ball)
-                else:
-                    # Check any pending rescue list
-                    rescue_ball = self._team[target_team].get_pending_rescue()
-
-                    if rescue_ball != '0':
-                        get_hit = self.rescue(rescue_ball)
-                        get_hit_team = get_hit[0]
-                        get_hit_num = int(get_hit[1])
-                        self._team[get_hit_team].ball[get_hit_num-1] \
-                            .remove_active_hit(rescue_ball)
-
                 # Check any pending hit list for eliminated ball
                 if (self.is_eliminated(target)):
                     # Remove Active Hit List from Striker
+                    print (target + " Eliminated")
                     self._team[striker_team].ball[striker_num - 1] \
                         .remove_all_active_hit(target)
 
                     # Keep track pending hit list
                     self._team[target_team].update_pending_hit(target_num)
 
+                # if there is a rescue ball
+                if rescue_ball != '0':
+                    print (rescue_ball + " Rescued")
+                    self.rescue(rescue_ball)
+                else:
+                    # Check any pending rescue list
+                    rescue_ball = self._team[target_team].get_pending_rescue()
+
+                    if rescue_ball != '0':
+                        print (rescue_ball + " Rescued")
+                        get_hit = self.rescue(rescue_ball)
+                        get_hit_team = get_hit[0]
+                        get_hit_num = int(get_hit[1])
+                        self._team[get_hit_team].ball[get_hit_num-1] \
+                            .remove_active_hit(rescue_ball)
+
             # Miss Hit
             else:
                 print (striker + " Miss Hit " + target)
+                print (striker + " Eliminated")
                 self._team[striker_team].ball[striker_num - 1].miss_hit(target)
                 self._team[target_team].ball[target_num - 1] \
                     .get_hit_by(striker)
